@@ -1,0 +1,12 @@
+#wp-admin-bar-my-sites-search.hide-if-no-js {
+	display: none;
+}
+#wp-admin-bar-my-sites-search {
+	height: 38px;
+}
+#wp-admin-bar-my-sites-search .ab-item {
+	height: 34px;
+}
+#wp-admin-bar-my-sites-search input {
+	padding: 0 2px;
+}
