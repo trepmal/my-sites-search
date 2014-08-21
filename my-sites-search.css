@@ -1,6 +1,13 @@
 #wp-admin-bar-my-sites-search.hide-if-no-js {
 	display: none;
 }
+#wp-admin-bar-my-sites-search label[for="my-sites-search-text"] {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
 #wp-admin-bar-my-sites-search {
 	height: 38px;
 }

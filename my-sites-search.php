@@ -17,7 +17,8 @@ function mss_admin_bar_menu( $wp_admin_bar ) {
 	$wp_admin_bar->add_menu( array(
 		'parent' => 'my-sites-list',
 		'id'     => 'my-sites-search',
-		'title'  => '<input type="text" placeholder="'. __( 'Search sites', 'mss' ) .'" />',
+		'title'  => '<label for="my-sites-search-text">'. __( 'Filter My Sites', 'mss' ) .'</label>' .
+					'<input type="text" id="my-sites-search-text" placeholder="'. __( 'Search Sites', 'mss' ) .'" />',
 		'meta'   => array(
 			'class' => 'hide-if-no-js'
 		)
