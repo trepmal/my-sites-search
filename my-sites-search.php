@@ -14,6 +14,10 @@
  */
 
 function mss_admin_bar_menu( $wp_admin_bar ) {
+
+	if(!is_user_logged_in())
+		return;
+
 	$wp_admin_bar->add_menu( array(
 		'parent' => 'my-sites-list',
 		'id'     => 'my-sites-search',
@@ -27,7 +31,7 @@ function mss_admin_bar_menu( $wp_admin_bar ) {
 add_action( 'admin_bar_menu', 'mss_admin_bar_menu' );
 
 function mss_enqueue_assets( ) {
-	if ( ! is_admin_bar_showing() ) return;
+	if ( ! is_admin_bar_showing() || !is_user_logged_in() ) return;
 	wp_enqueue_script( 'my-sites-search', plugins_url( 'my-sites-search.js', __FILE__ ), array('jquery'), '2014.07.30', true );
 	wp_enqueue_style( 'my-sites-search', plugins_url( 'my-sites-search.css', __FILE__ ) );
 }
