@@ -16,4 +16,6 @@
 }
 #wp-admin-bar-my-sites-search input {
 	padding: 0 2px;
+	width: 95%;
+	width: calc( 100% - 4px );
 }
