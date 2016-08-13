@@ -3,7 +3,7 @@
  * Plugin Name: My Sites Search
  * Plugin URI: trepmal.com
  * Description: https://twitter.com/trepmal/status/443189183478132736
- * Version: 2014.07.30
+ * Version: 2016.08.12
  * Author: Kailey Lampert
  * Author URI: kaileylampert.com
  * License: GPLv2 or later
@@ -13,49 +13,102 @@
  * Network: true
  */
 
+add_action( 'admin_bar_menu',        'mss_admin_bar_menu' );
+add_action( 'wp_enqueue_scripts',    'mss_enqueue_styles' );
+add_action( 'admin_enqueue_scripts', 'mss_enqueue_styles' );
+add_action( 'wp_enqueue_scripts',    'mss_enqueue_scripts' );
+add_action( 'admin_enqueue_scripts', 'mss_enqueue_scripts' );
+
+/**
+ * Add search field menu item
+ *
+ * @param WP_Admin_Bar $wp_admin_bar
+ * @return void
+ */
 function mss_admin_bar_menu( $wp_admin_bar ) {
 
-	if( ! is_user_logged_in() || mss_my_sites_count_below_minimum() ) {
+	$total_users_sites = count( $wp_admin_bar->user->blogs );
+	$show_if_gt        = apply_filters( 'mms_show_search_minimum_sites', 10 );
+
+	if ( ! is_user_logged_in() || ( $total_users_sites < $show_if_gt ) ) {
 		return;
 	}
 
 	$wp_admin_bar->add_menu( array(
 		'parent' => 'my-sites-list',
 		'id'     => 'my-sites-search',
-		'title'  => '<label for="my-sites-search-text">'. __( 'Filter My Sites', 'mss' ) .'</label>' .
-					'<input type="text" id="my-sites-search-text" placeholder="'. __( 'Search Sites', 'mss' ) .'" />',
+		'title'  => sprintf(
+			'<label for="my-sites-search-text">%s</label><input type="text" id="my-sites-search-text" placeholder="%s" />',
+			esc_html__( 'Filter My Sites', 'mss' ),
+			esc_attr__( 'Search Sites', 'mss' )
+		),
 		'meta'   => array(
 			'class' => 'hide-if-no-js'
 		)
 	) );
 }
 
-add_action( 'admin_bar_menu', 'mss_admin_bar_menu' );
-
-function mss_enqueue_assets( ) {
-	if ( ! is_admin_bar_showing() || !is_user_logged_in() || mss_my_sites_count_below_minimum() ) {
-		return;
-	}
-
-	wp_enqueue_script( 'my-sites-search', plugins_url( 'my-sites-search.js', __FILE__ ), array('jquery'), '2014.07.30', true );
-	wp_enqueue_style( 'my-sites-search', plugins_url( 'my-sites-search.css', __FILE__ ) );
+/**
+ * Enqueue styles
+ * Inline styles with admin-bar dependency
+ *
+ * @return void
+ */
+function mss_enqueue_styles() {
+	ob_start();
+	?>
+#wp-admin-bar-my-sites-search.hide-if-no-js {
+	display: none;
 }
-add_action( 'wp_enqueue_scripts', 'mss_enqueue_assets' );
-add_action( 'admin_enqueue_scripts', 'mss_enqueue_assets' );
+#wp-admin-bar-my-sites-search label[for="my-sites-search-text"] {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+#wp-admin-bar-my-sites-search {
+	height: 38px;
+}
+#wp-admin-bar-my-sites-search .ab-item {
+	height: 34px;
+}
+#wp-admin-bar-my-sites-search input {
+	padding: 0 2px;
+	width: 95%;
+	width: calc( 100% - 4px );
+}
+	<?php
+	$style = ob_get_clean();
+	wp_enqueue_style( 'admin-bar' );
+	wp_add_inline_style( 'admin-bar', $style );
+}
 
-// optionally provide a way for site administrators to specify a
-// minimum via a filter 'mms_show_search_minimum_sites'
-function mss_my_sites_count_below_minimum(){
-	static $below_min = null;
-	if ( ! is_null( $below_min ) ) {
-		return $below_min;
-	}
+/**
+ * Enqueue JavaScript
+ * Inline script with jQuery dependency
+ *
+ * @return void
+ */
+function mss_enqueue_scripts() {
+	ob_start();
+	?>
+jQuery(document).ready( function($) {
+	$('#wp-admin-bar-my-sites-search.hide-if-no-js').show();
+	$('#wp-admin-bar-my-sites-search input').keyup( function( ) {
 
-	$below_min = false;
-	$minimum = apply_filters( 'mms_show_search_minimum_sites', false );
-	if ( is_numeric( $minimum ) ) {
-		$below_min = count( get_blogs_of_user( get_current_user_id() ) ) < intval( $minimum );
-	}
+		var searchValRegex = new RegExp( $(this).val(), 'i');
 
-	return $below_min;
+		$('#wp-admin-bar-my-sites-list > li.menupop').hide().filter(function() {
+
+			return searchValRegex.test( $(this).find('> a').text() );
+
+		}).show();
+
+	});
+});
+	<?php
+	$script = ob_get_clean();
+	wp_enqueue_script( 'jquery-core' );
+	wp_add_inline_script( 'jquery-core', $script );
 }
