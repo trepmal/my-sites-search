@@ -4,7 +4,21 @@
   "homepage": "https://github.com/trepmal/my-sites-search",
   "license": "GPLv2",
   "description": "Provides a simple filtering mechanism for finding items in a large My Sites menu.",
-  "keywords": ["plugin","wordpress","my-sites-search","multisite","menu"],
+  "keywords": [
+    "plugin",
+    "wordpress",
+    "my-sites-search",
+    "multisite",
+    "menu"
+  ],
+  "authors": [
+    {
+      "name": "Kailey Lampert",
+      "email": "trepmal@gmail.com",
+      "homepage": "https://trepmal.com",
+      "role": "Developer"
+    }
+  ],
   "require": {
     "composer/installers": "~1.0.6"
   }
