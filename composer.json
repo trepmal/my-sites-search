@@ -2,7 +2,7 @@
   "name": "trepmal/my-sites-search",
   "type": "wordpress-plugin",
   "homepage": "https://github.com/trepmal/my-sites-search",
-  "license": "GPLv2",
+  "license": "GPL-2.0-only",
   "description": "Provides a simple filtering mechanism for finding items in a large My Sites menu.",
   "keywords": [
     "plugin",
