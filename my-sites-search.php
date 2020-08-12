@@ -109,6 +109,14 @@ jQuery(document).ready( function($) {
 });
 	<?php
 	$script = ob_get_clean();
-	wp_enqueue_script( 'jquery-core' );
-	wp_add_inline_script( 'jquery-core', $script );
+
+	// the great jquery migrate compat
+	// see https://core.trac.wordpress.org/changeset/48323 for starters
+	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
+		wp_enqueue_script( 'jquery-core' );
+		wp_add_inline_script( 'jquery-core', $script );
+	} else {
+		wp_enqueue_script( 'jquery' );
+		wp_add_inline_script( 'jquery', $script );
+	}
 }
