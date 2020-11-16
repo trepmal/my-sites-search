@@ -103,13 +103,6 @@ jQuery(document).ready( function($) {
 });
 SCRIPT;
 
-	// the great jquery migrate compat
-	// see https://core.trac.wordpress.org/changeset/48323 for starters
-	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
-		wp_enqueue_script( 'jquery-core' );
-		wp_add_inline_script( 'jquery-core', $script );
-	} else {
-		wp_enqueue_script( 'jquery' );
-		wp_add_inline_script( 'jquery', $script );
-	}
+	wp_enqueue_script( 'admin-bar' );
+	wp_add_inline_script( 'admin-bar', $script );
 }
