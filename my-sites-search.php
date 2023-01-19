@@ -27,10 +27,14 @@ add_action( 'admin_enqueue_scripts', 'mss_enqueue_scripts' );
  */
 function mss_admin_bar_menu( $wp_admin_bar ) {
 
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
 	$total_users_sites = count( $wp_admin_bar->user->blogs );
 	$show_if_gt        = apply_filters( 'mms_show_search_minimum_sites', 10 );
 
-	if ( ! is_user_logged_in() || ( $total_users_sites < $show_if_gt ) ) {
+	if ( $total_users_sites < $show_if_gt ) {
 		return;
 	}
 
